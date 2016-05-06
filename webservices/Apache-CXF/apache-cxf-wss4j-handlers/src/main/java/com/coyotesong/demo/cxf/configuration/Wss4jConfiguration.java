@@ -20,6 +20,8 @@
  */
 package com.coyotesong.demo.cxf.configuration;
 
+import static org.apache.wss4j.dom.handler.WSHandlerConstants.*;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,7 +37,6 @@ import org.apache.cxf.jaxws.EndpointImpl;
 import org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor;
 import org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor;
 import org.apache.wss4j.dom.WSConstants;
-import org.apache.wss4j.dom.handler.WSHandlerConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -94,18 +95,18 @@ public class Wss4jConfiguration {
 	public WSS4JInInterceptor wss4jIn() {
 		Map<String, Object> props = new HashMap<>();
 		// props.put(WSHandlerConstants.ACTION, WSHandlerConstants.TIMESTAMP);
-		props.put(WSHandlerConstants.ACTION, WSHandlerConstants.USERNAME_TOKEN);
-		props.put(WSHandlerConstants.PASSWORD_TYPE, WSConstants.PW_TEXT);
+		props.put(ACTION, USERNAME_TOKEN);
+		//props.put(PASSWORD_TYPE, WSConstants.PW_TEXT);
 		// for hashed passwords use
-		//props.put(WSHandlerConstants.PASSWORD_TYPE, WSConstants.PW_DIGEST);
-		props.put(WSHandlerConstants.PW_CALLBACK_REF, serverPasswordHandler);
+		props.put(PASSWORD_TYPE, WSConstants.PW_DIGEST);
+		props.put(PW_CALLBACK_REF, serverPasswordHandler);
 		return new WSS4JInInterceptor(props);
 	}
 	
 	@Bean
 	public WSS4JOutInterceptor wss4jOut() {
 		Map<String, Object> props = new HashMap<>();
-		props.put(WSHandlerConstants.ACTION, WSHandlerConstants.TIMESTAMP);
+		props.put(ACTION, TIMESTAMP);
 		return new WSS4JOutInterceptor(props);
 	}
 }
