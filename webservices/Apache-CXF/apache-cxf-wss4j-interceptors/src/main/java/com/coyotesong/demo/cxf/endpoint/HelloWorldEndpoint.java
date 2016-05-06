@@ -25,6 +25,7 @@ import javax.jws.WebService;
 import javax.xml.ws.WebServiceContext;
 
 import org.apache.cxf.interceptor.InInterceptors;
+import org.apache.cxf.interceptor.OutInterceptors;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.coyotesong.demo.cxf.controller.HelloWorldController;
@@ -37,7 +38,11 @@ import com.coyotesong.demo.cxf.namespace.helloworldservice.general.HelloWorldRet
  * @author bgiles
  */
 @WebService(endpointInterface = "com.coyotesong.demo.cxf.controller.HelloWorldController")
-@InInterceptors(interceptors = { "com.coyotesong.demo.cxf.security.WSSecurityInterceptor" })
+@InInterceptors(interceptors = { 
+        "org.apache.cxf.interceptor.LoggingInInterceptor",
+        "com.coyotesong.demo.cxf.security.WSSecurityInterceptor" })
+@OutInterceptors(interceptors = { 
+        "org.apache.cxf.interceptor.LoggingOutInterceptor" })
 public class HelloWorldEndpoint implements HelloWorldController {
 
 	@Autowired

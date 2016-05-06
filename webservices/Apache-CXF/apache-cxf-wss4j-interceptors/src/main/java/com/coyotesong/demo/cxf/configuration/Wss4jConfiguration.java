@@ -20,34 +20,21 @@
  */
 package com.coyotesong.demo.cxf.configuration;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.xml.ws.Endpoint;
 
 import org.apache.cxf.Bus;
-import org.apache.cxf.binding.soap.saaj.SAAJInInterceptor;
-import org.apache.cxf.binding.soap.saaj.SAAJOutInterceptor;
 import org.apache.cxf.bus.spring.SpringBus;
-import org.apache.cxf.interceptor.LoggingInInterceptor;
-import org.apache.cxf.interceptor.LoggingOutInterceptor;
 import org.apache.cxf.jaxws.EndpointImpl;
-import org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor;
-import org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor;
-import org.apache.wss4j.dom.WSConstants;
-import org.apache.wss4j.dom.handler.WSHandlerConstants;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 import com.coyotesong.demo.cxf.controller.HelloWorldController;
 import com.coyotesong.demo.cxf.endpoint.HelloWorldEndpoint;
-import com.coyotesong.demo.cxf.security.ServerPasswordHandler;
 
 @Configuration
 @Profile("wss4j")
 public class Wss4jConfiguration {
-
 	@Bean(name = Bus.DEFAULT_BUS_ID)
 	public SpringBus springBus() {
 		return new SpringBus();
@@ -65,9 +52,6 @@ public class Wss4jConfiguration {
 		EndpointImpl endpoint = new EndpointImpl(springBus(), helloWorld());
 		endpoint.publish("/HelloWorldService_1.0");
 		endpoint.setWsdlLocation("HelloWorld1.0.wsdl");
-		
-		endpoint.getInInterceptors().add(new LoggingInInterceptor());
-		endpoint.getOutInterceptors().add(new LoggingOutInterceptor());
 		
 		return endpoint;
 	}
