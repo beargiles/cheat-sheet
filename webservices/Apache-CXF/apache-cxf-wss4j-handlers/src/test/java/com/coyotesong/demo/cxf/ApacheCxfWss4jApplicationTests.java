@@ -20,10 +20,12 @@
  */
 package com.coyotesong.demo.cxf;
 
+import static org.apache.wss4j.common.ConfigurationConstants.SIG_PROP_FILE;
 import static org.apache.wss4j.dom.handler.WSHandlerConstants.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -74,13 +76,20 @@ public class ApacheCxfWss4jApplicationTests {
 	
 	public WSS4JOutInterceptor wss4jOut() {
 		Map<String, Object> props = new HashMap<>();
-		props.put(ACTION, USERNAME_TOKEN);
+		props.put(ACTION, String.join(" ", SIGNATURE, TIMESTAMP, USERNAME_TOKEN));
 		//props.put(PASSWORD_TYPE, WSConstants.PW_TEXT);
 		// for hashed passwords use
 		props.put(PASSWORD_TYPE, WSConstants.PW_DIGEST);
 		props.put(USER, "joe");
-		props.put(PW_CALLBACK_CLASS, ClientPasswordCallback.class.getName());
-		return new WSS4JOutInterceptor(props);
+		
+	    // support X.509 encryption
+        props.put(SIG_PROP_FILE, "client_sign.properties");
+        // props.put(ENC_PROP_FILE, "client_enc.properties");
+
+        // NOTE: this password is used for both DIGEST and SIG (alias key passwd)
+        props.put(PW_CALLBACK_CLASS, ClientPasswordCallback.class.getName());
+
+        return new WSS4JOutInterceptor(props);
 	}
 
 	/**

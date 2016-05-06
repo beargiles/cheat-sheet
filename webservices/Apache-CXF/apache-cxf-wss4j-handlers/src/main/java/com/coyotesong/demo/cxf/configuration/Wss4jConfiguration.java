@@ -22,6 +22,7 @@ package com.coyotesong.demo.cxf.configuration;
 
 import static org.apache.wss4j.dom.handler.WSHandlerConstants.*;
 
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -94,12 +95,18 @@ public class Wss4jConfiguration {
 	@Bean
 	public WSS4JInInterceptor wss4jIn() {
 		Map<String, Object> props = new HashMap<>();
-		// props.put(WSHandlerConstants.ACTION, WSHandlerConstants.TIMESTAMP);
-		props.put(ACTION, USERNAME_TOKEN);
+		props.put(ACTION, String.join(" ", SIGNATURE, TIMESTAMP, USERNAME_TOKEN));
 		//props.put(PASSWORD_TYPE, WSConstants.PW_TEXT);
 		// for hashed passwords use
 		props.put(PASSWORD_TYPE, WSConstants.PW_DIGEST);
-		props.put(PW_CALLBACK_REF, serverPasswordHandler);
+
+		// support X.509 encryption
+        props.put(SIG_PROP_FILE, "server_sign.properties");
+        // props.put(ENC_PROP_FILE, "server_enc.properties");
+
+        // NOTE: password is used for both DIGEST and ENC key alias passwd
+        props.put(PW_CALLBACK_REF, serverPasswordHandler);
+
 		return new WSS4JInInterceptor(props);
 	}
 	

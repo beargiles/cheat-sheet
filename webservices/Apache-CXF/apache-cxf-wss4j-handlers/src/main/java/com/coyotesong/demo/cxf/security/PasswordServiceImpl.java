@@ -34,7 +34,7 @@ public class PasswordServiceImpl implements PasswordService {
 	private Map<String, String> passwd = new HashMap<>();
 	
 	public PasswordServiceImpl() {
-		passwd.put("joe", "password");
+		passwd.put("joe", "joePassword");
 	}
 	
 	/**
