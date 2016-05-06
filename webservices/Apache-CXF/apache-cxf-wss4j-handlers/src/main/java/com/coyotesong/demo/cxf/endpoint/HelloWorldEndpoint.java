@@ -24,7 +24,6 @@ import javax.annotation.Resource;
 import javax.jws.WebService;
 import javax.xml.ws.WebServiceContext;
 
-import org.apache.cxf.interceptor.InInterceptors;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.coyotesong.demo.cxf.controller.HelloWorldController;

@@ -28,7 +28,14 @@ import javax.security.auth.callback.UnsupportedCallbackException;
 
 import org.apache.wss4j.common.ext.WSPasswordCallback;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+/**
+ * Server-side CallbackHandler.
+ * 
+ * @author bgiles
+ */
+@Component
 public class ServerPasswordHandler implements CallbackHandler {
 	@Autowired
 	private PasswordService pwService;

@@ -36,6 +36,7 @@ import org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor;
 import org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor;
 import org.apache.wss4j.dom.WSConstants;
 import org.apache.wss4j.dom.handler.WSHandlerConstants;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -47,7 +48,9 @@ import com.coyotesong.demo.cxf.security.ServerPasswordHandler;
 @Configuration
 @Profile("wss4j")
 public class Wss4jConfiguration {
-
+    @Autowired
+    private ServerPasswordHandler serverPasswordHandler;
+    
 	@Bean(name = Bus.DEFAULT_BUS_ID)
 	public SpringBus springBus() {
 		return new SpringBus();
@@ -95,7 +98,7 @@ public class Wss4jConfiguration {
 		props.put(WSHandlerConstants.PASSWORD_TYPE, WSConstants.PW_TEXT);
 		// for hashed passwords use
 		//props.put(WSHandlerConstants.PASSWORD_TYPE, WSConstants.PW_DIGEST);
-		props.put(WSHandlerConstants.PW_CALLBACK_CLASS, ServerPasswordHandler.class.getName());
+		props.put(WSHandlerConstants.PW_CALLBACK_REF, serverPasswordHandler);
 		return new WSS4JInInterceptor(props);
 	}
 	
