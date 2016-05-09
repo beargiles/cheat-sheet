@@ -20,6 +20,9 @@
  */
 package com.coyotesong.demo.cxf.configuration;
 
+import static org.apache.wss4j.common.ConfigurationConstants.ENCRYPT;
+import static org.apache.wss4j.common.ConfigurationConstants.SIGNATURE;
+import static org.apache.wss4j.common.ConfigurationConstants.TIMESTAMP;
 import static org.apache.wss4j.dom.handler.WSHandlerConstants.*;
 
 import java.net.URL;
@@ -38,6 +41,7 @@ import org.apache.cxf.jaxws.EndpointImpl;
 import org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor;
 import org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor;
 import org.apache.wss4j.dom.WSConstants;
+import org.apache.wss4j.dom.handler.WSHandlerConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -95,17 +99,23 @@ public class Wss4jConfiguration {
 	@Bean
 	public WSS4JInInterceptor wss4jIn() {
 		Map<String, Object> props = new HashMap<>();
-		props.put(ACTION, String.join(" ", SIGNATURE, TIMESTAMP, USERNAME_TOKEN));
+        props.put(ACTION, String.join(" ", USERNAME_TOKEN, ENCRYPT, SIGNATURE, TIMESTAMP));
 		//props.put(PASSWORD_TYPE, WSConstants.PW_TEXT);
 		// for hashed passwords use
 		props.put(PASSWORD_TYPE, WSConstants.PW_DIGEST);
 
-		// support X.509 encryption
-        props.put(SIG_PROP_FILE, "server_sign.properties");
-        //props.put(ENC_PROP_FILE, "server_enc.properties");
-        //props.put(USE_SINGLE_CERTIFICATE, "false");
+		// inbound messages should be signed by known certificate.
+		props.put(SIG_PROP_FILE, "server_sign.properties");
+        props.put(ENABLE_SIGNATURE_CONFIRMATION, "true");
 
-        // NOTE: password is used for both DIGEST and ENC key alias passwd
+		// inbound messages should be encrypted
+        props.put(DEC_PROP_FILE, "server_dec.properties");
+
+        // basic security checks.
+        props.put(REQUIRE_SIGNED_ENCRYPTED_DATA_ELEMENTS, "true");
+        props.put(REQUIRE_TIMESTAMP_EXPIRES, "true");
+        
+        // callback used for both private key (for decryption) and to verify user token.
         props.put(PW_CALLBACK_REF, serverPasswordHandler);
 
 		return new WSS4JInInterceptor(props);
@@ -113,8 +123,20 @@ public class Wss4jConfiguration {
 	
 	@Bean
 	public WSS4JOutInterceptor wss4jOut() {
-		Map<String, Object> props = new HashMap<>();
-		props.put(ACTION, TIMESTAMP);
-		return new WSS4JOutInterceptor(props);
+        Map<String, Object> props = new HashMap<>();
+        props.put(ACTION, String.join(" ", ENCRYPT, SIGNATURE, TIMESTAMP));
+
+        // outbound messages should be signed
+        props.put(SIGNATURE_USER, "server");
+        props.put(SIG_PROP_FILE, "server_sign.properties");
+
+        // outbound messages should be encrypted with inbound public key
+        props.put(ENC_PROP_FILE, "server_enc.properties");
+        props.put(ENCRYPTION_USER, USE_REQ_SIG_CERT);
+        
+        // callback used for private key (for signature)
+        props.put(PW_CALLBACK_REF, serverPasswordHandler);
+
+        return new WSS4JOutInterceptor(props);
 	}
 }

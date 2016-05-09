@@ -35,6 +35,7 @@ public class PasswordServiceImpl implements PasswordService {
 	
 	public PasswordServiceImpl() {
 		passwd.put("joe", "joePassword");
+        passwd.put("server", "joePassword");
 	}
 	
 	/**

@@ -24,6 +24,8 @@ import javax.annotation.Resource;
 import javax.jws.WebService;
 import javax.xml.ws.WebServiceContext;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.coyotesong.demo.cxf.controller.HelloWorldController;
@@ -37,6 +39,7 @@ import com.coyotesong.demo.cxf.namespace.helloworldservice.general.HelloWorldRet
  */
 @WebService(endpointInterface = "com.coyotesong.demo.cxf.controller.HelloWorldController")
 public class HelloWorldEndpoint implements HelloWorldController {
+    private static final Logger LOGGER = LoggerFactory.getLogger(HelloWorldEndpoint.class.getName());
 
 	@Autowired
 	private HelloWorldController helloWorldController;
@@ -47,6 +50,7 @@ public class HelloWorldEndpoint implements HelloWorldController {
 	@Override
 	public HelloWorldReturn sayHi(String text) {
 		try {
+		    LOGGER.info("remote user is '{}'", wsContext.getUserPrincipal().getName());
 			return helloWorldController.sayHi(text);
 		} catch (Exception e) {
 			return new HelloWorldReturn(false, e.getMessage());

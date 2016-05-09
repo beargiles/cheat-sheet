@@ -20,6 +20,8 @@
  */
 package com.coyotesong.demo.cxf.security;
 
+import static org.apache.wss4j.common.ext.WSPasswordCallback.*;
+
 import java.io.IOException;
 
 import javax.security.auth.callback.Callback;
@@ -40,22 +42,44 @@ import org.springframework.stereotype.Component;
 @Component
 public class ServerPasswordHandler implements CallbackHandler {
     private static final Logger LOGGER = LoggerFactory.getLogger(ServerPasswordHandler.class);
-    
-	@Autowired
-	private PasswordService pwService;
-	
-	public void handle(Callback[] callbacks) throws IOException, UnsupportedCallbackException {
-	    for (Callback callback : callbacks) {
-	        if (callback instanceof WSPasswordCallback) {
-	            WSPasswordCallback pc = (WSPasswordCallback) callback;
-	            // this gives the expected password for the user.
-	            String username = pc.getIdentifier();
-	            if (pwService.containsUser(username)) {
-	                pc.setPassword(pwService.getPassword(username));
-	            }
-	        } else {
-	            LOGGER.info("unhandled callback: {}", callback.getClass().getName());
-	        }
-	    }
-	}
+
+    @Autowired
+    private PasswordService pwService;
+
+    public void handle(Callback[] callbacks) throws IOException, UnsupportedCallbackException {
+        for (Callback callback : callbacks) {
+            if (callback instanceof WSPasswordCallback) {
+                WSPasswordCallback pc = (WSPasswordCallback) callback;
+
+                String key = pc.getIdentifier();
+                switch (pc.getUsage()) {
+                    case DECRYPT:
+                        // password for private key
+                        LOGGER.info("decryption private key password callback for {}", key);
+                        if (pwService.containsUser(key)) {
+                            pc.setPassword(pwService.getPassword(key));
+                        }
+                        break;
+                    case USERNAME_TOKEN:
+                        // user password
+                        LOGGER.info("user password callback for {}", key);
+                        if (pwService.containsUser(key)) {
+                            pc.setPassword(pwService.getPassword(key));
+                        }
+                        break;
+                    case SIGNATURE:
+                        // password for private key
+                        LOGGER.info("signature private key password callback for {}", key);
+                        if (pwService.containsUser(key)) {
+                            pc.setPassword(pwService.getPassword(key));
+                        }
+                        break;
+                    default:
+                        LOGGER.info("unhandled usage: {}", pc.getUsage());
+                }
+            } else {
+                LOGGER.info("unhandled callback: {}", callback.getClass().getName());
+            }
+        }
+    }
 }

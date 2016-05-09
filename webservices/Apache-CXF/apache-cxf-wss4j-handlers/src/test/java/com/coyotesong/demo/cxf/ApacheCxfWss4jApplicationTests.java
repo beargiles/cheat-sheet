@@ -20,7 +20,17 @@
  */
 package com.coyotesong.demo.cxf;
 
+import static org.apache.wss4j.common.ConfigurationConstants.ACTION;
+import static org.apache.wss4j.common.ConfigurationConstants.DEC_PROP_FILE;
+import static org.apache.wss4j.common.ConfigurationConstants.ENABLE_SIGNATURE_CONFIRMATION;
+import static org.apache.wss4j.common.ConfigurationConstants.ENCRYPT;
+import static org.apache.wss4j.common.ConfigurationConstants.PASSWORD_TYPE;
+import static org.apache.wss4j.common.ConfigurationConstants.PW_CALLBACK_REF;
+import static org.apache.wss4j.common.ConfigurationConstants.REQUIRE_SIGNED_ENCRYPTED_DATA_ELEMENTS;
+import static org.apache.wss4j.common.ConfigurationConstants.SIGNATURE;
 import static org.apache.wss4j.common.ConfigurationConstants.SIG_PROP_FILE;
+import static org.apache.wss4j.common.ConfigurationConstants.TIMESTAMP;
+import static org.apache.wss4j.common.ConfigurationConstants.USERNAME_TOKEN;
 import static org.apache.wss4j.dom.handler.WSHandlerConstants.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -70,22 +80,41 @@ public class ApacheCxfWss4jApplicationTests {
 	
 	public WSS4JInInterceptor wss4jIn() {
 		Map<String, Object> props = new HashMap<>();
-		props.put(ACTION, TIMESTAMP);
-		return new WSS4JInInterceptor(props);
+        props.put(ACTION, String.join(" ", ENCRYPT, SIGNATURE, TIMESTAMP));
+
+        // inbound messages should be signed by known certificate (server).
+        props.put(SIG_PROP_FILE, "client_sign.properties");
+        props.put(ENABLE_SIGNATURE_CONFIRMATION, "true");
+
+        // inbound messages should be encrypted
+        props.put(DEC_PROP_FILE, "client_dec.properties");
+
+        // basic security checks
+        props.put(REQUIRE_SIGNED_ENCRYPTED_DATA_ELEMENTS, "true");
+        props.put(REQUIRE_TIMESTAMP_EXPIRES, "true");
+        
+        props.put(PW_CALLBACK_CLASS, ClientPasswordCallback.class.getName());
+                
+        return new WSS4JInInterceptor(props);
 	}
 	
 	public WSS4JOutInterceptor wss4jOut() {
 		Map<String, Object> props = new HashMap<>();
-		props.put(ACTION, String.join(" ", SIGNATURE, TIMESTAMP, USERNAME_TOKEN));
-		//props.put(PASSWORD_TYPE, WSConstants.PW_TEXT);
+        props.put(ACTION, String.join(" ", USERNAME_TOKEN, ENCRYPT, SIGNATURE, TIMESTAMP));
+        //props.put(PASSWORD_TYPE, WSConstants.PW_TEXT);
 		// for hashed passwords use
 		props.put(PASSWORD_TYPE, WSConstants.PW_DIGEST);
 		props.put(USER, "joe");
 		
-	    // support X.509 encryption
-        props.put(SIG_PROP_FILE, "client_sign.properties");
-        //props.put(ENC_PROP_FILE, "client_enc.properties");
-        //props.put(ENCRYPTION_USER, "server");
+	    // outbound messages should be signed.
+        props.put(SIGNATURE_USER, "joe");
+		props.put(SIG_PROP_FILE, "client_sign.properties");
+		// props.put(SIG_KEY_ID, "X509KeyIdentifier");
+		// IssuerSerial, DirectReference, X509KeyIdentifier, Thumbprint, SKIKeyIdentifier, KeyValue
+		
+		// outbound messages should be encrypted. 
+		props.put(ENC_PROP_FILE, "client_enc.properties");
+        props.put(ENCRYPTION_USER, "server");
 
         // NOTE: this password is used for both DIGEST and SIG (alias key passwd)
         props.put(PW_CALLBACK_CLASS, ClientPasswordCallback.class.getName());
