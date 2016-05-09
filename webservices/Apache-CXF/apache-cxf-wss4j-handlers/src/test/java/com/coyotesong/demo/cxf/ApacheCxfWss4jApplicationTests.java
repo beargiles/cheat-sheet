@@ -84,11 +84,12 @@ public class ApacheCxfWss4jApplicationTests {
 		
 	    // support X.509 encryption
         props.put(SIG_PROP_FILE, "client_sign.properties");
-        // props.put(ENC_PROP_FILE, "client_enc.properties");
+        //props.put(ENC_PROP_FILE, "client_enc.properties");
+        //props.put(ENCRYPTION_USER, "server");
 
         // NOTE: this password is used for both DIGEST and SIG (alias key passwd)
         props.put(PW_CALLBACK_CLASS, ClientPasswordCallback.class.getName());
-
+        
         return new WSS4JOutInterceptor(props);
 	}
 

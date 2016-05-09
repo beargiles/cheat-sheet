@@ -102,7 +102,8 @@ public class Wss4jConfiguration {
 
 		// support X.509 encryption
         props.put(SIG_PROP_FILE, "server_sign.properties");
-        // props.put(ENC_PROP_FILE, "server_enc.properties");
+        //props.put(ENC_PROP_FILE, "server_enc.properties");
+        //props.put(USE_SINGLE_CERTIFICATE, "false");
 
         // NOTE: password is used for both DIGEST and ENC key alias passwd
         props.put(PW_CALLBACK_REF, serverPasswordHandler);

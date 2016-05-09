@@ -27,6 +27,8 @@ import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.callback.UnsupportedCallbackException;
 
 import org.apache.wss4j.common.ext.WSPasswordCallback;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -37,15 +39,23 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class ServerPasswordHandler implements CallbackHandler {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ServerPasswordHandler.class);
+    
 	@Autowired
 	private PasswordService pwService;
 	
 	public void handle(Callback[] callbacks) throws IOException, UnsupportedCallbackException {
-		WSPasswordCallback pc = (WSPasswordCallback) callbacks[0];
-		// this gives the expected password for the user.
-		String username = pc.getIdentifier();
-		if (pwService.containsUser(username)) {
-			pc.setPassword(pwService.getPassword(username));
-		}
+	    for (Callback callback : callbacks) {
+	        if (callback instanceof WSPasswordCallback) {
+	            WSPasswordCallback pc = (WSPasswordCallback) callback;
+	            // this gives the expected password for the user.
+	            String username = pc.getIdentifier();
+	            if (pwService.containsUser(username)) {
+	                pc.setPassword(pwService.getPassword(username));
+	            }
+	        } else {
+	            LOGGER.info("unhandled callback: {}", callback.getClass().getName());
+	        }
+	    }
 	}
 }
