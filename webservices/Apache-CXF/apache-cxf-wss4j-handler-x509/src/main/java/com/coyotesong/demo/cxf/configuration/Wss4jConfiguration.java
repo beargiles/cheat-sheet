@@ -55,9 +55,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
-import com.coyotesong.demo.cxf.controller.HelloWorldController;
-import com.coyotesong.demo.cxf.endpoint.HelloWorldEndpoint;
+import com.coyotesong.demo.cxf.endpoint.HelloWorldServiceEndpoint;
 import com.coyotesong.demo.cxf.security.ServerPasswordHandler;
+import com.coyotesong.namespace.helloworldservice.HelloWorldService;
 
 @Configuration
 @Profile("wss4j")
@@ -71,37 +71,27 @@ public class Wss4jConfiguration {
     }
 
     @Bean
-    public HelloWorldController helloWorld() {
-        return new HelloWorldEndpoint();
+    public HelloWorldService helloWorldService() {
+        return new HelloWorldServiceEndpoint();
     }
 
     @Bean
     public Endpoint endpoint() {
         // JaxWsServerFactoryBean bean = new JaxWsServerFactoryBean();
 
-        EndpointImpl endpoint = new EndpointImpl(springBus(), helloWorld());
-        endpoint.publish("/HelloWorldService_1.0");
+        EndpointImpl endpoint = new EndpointImpl(springBus(), helloWorldService());
+        endpoint.publish("/HelloWorldSoapService_1.0");
         endpoint.setWsdlLocation("HelloWorld1.0.wsdl");
 
         endpoint.getInInterceptors().add(new LoggingInInterceptor());
-        endpoint.getInInterceptors().add(saajIn());
+        endpoint.getInInterceptors().add(new SAAJInInterceptor());
         endpoint.getInInterceptors().add(wss4jIn());
 
         endpoint.getOutInterceptors().add(wss4jOut());
-        endpoint.getOutInterceptors().add(saajOut());
+        endpoint.getOutInterceptors().add(new SAAJOutInterceptor());
         endpoint.getOutInterceptors().add(new LoggingOutInterceptor());
 
         return endpoint;
-    }
-
-    @Bean
-    public SAAJInInterceptor saajIn() {
-        return new SAAJInInterceptor();
-    }
-
-    @Bean
-    public SAAJOutInterceptor saajOut() {
-        return new SAAJOutInterceptor();
     }
 
     @Bean

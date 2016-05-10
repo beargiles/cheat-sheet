@@ -41,6 +41,8 @@ import static org.junit.Assert.assertTrue;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.xml.ws.Holder;
+
 import org.apache.cxf.binding.soap.saaj.SAAJInInterceptor;
 import org.apache.cxf.binding.soap.saaj.SAAJOutInterceptor;
 import org.apache.cxf.interceptor.LoggingInInterceptor;
@@ -53,8 +55,8 @@ import org.junit.runner.RunWith;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.coyotesong.demo.cxf.controller.HelloWorldController;
-import com.coyotesong.demo.cxf.namespace.helloworldservice.general.HelloWorldReturn;
+import com.coyotesong.namespace.helloworldservice.HelloWorldException;
+import com.coyotesong.namespace.helloworldservice.HelloWorldService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = ApacheCxfWss4jApplication.class)
@@ -65,9 +67,9 @@ public class ApacheCxfWss4jApplicationTests {
      * 
      * @return
      */
-    HelloWorldController newHelloWorldClient() {
+    HelloWorldService newHelloWorldClient() {
         JaxWsProxyFactoryBean factory = new JaxWsProxyFactoryBean();
-        factory.setAddress("http://localhost:8080/soap/HelloWorldService_1.0");
+        factory.setAddress("http://localhost:8080/soap/HelloWorldSoapService_1.0");
         factory.getInInterceptors().add(new LoggingInInterceptor());
         factory.getInInterceptors().add(new SAAJInInterceptor());
         factory.getInInterceptors().add(wss4jIn());
@@ -75,8 +77,8 @@ public class ApacheCxfWss4jApplicationTests {
         factory.getOutInterceptors().add(wss4jOut());
         factory.getOutInterceptors().add(new SAAJOutInterceptor());
         factory.getOutInterceptors().add(new LoggingOutInterceptor());
-
-        return factory.create(HelloWorldController.class);
+        
+        return factory.create(HelloWorldService.class);
     }
 
     public WSS4JInInterceptor wss4jIn() {
@@ -125,12 +127,14 @@ public class ApacheCxfWss4jApplicationTests {
      * Test client.
      */
     @Test
-    public void testClient() {
-        HelloWorldController bean = newHelloWorldClient();
-
+    public void testClient() throws HelloWorldException {
         final String expected = "Hello World";
-        final HelloWorldReturn actual = bean.sayHi("World");
-        assertEquals(expected, actual.getText());
-        assertTrue(actual.isSuccess());
+        HelloWorldService bean = newHelloWorldClient();
+
+        Holder<Boolean> success = new Holder<>();
+        Holder<String> actual = new Holder<>();
+        bean.sayHi("World", success, actual);
+        assertEquals(expected, actual.value);
+        assertTrue(Boolean.TRUE.equals(success.value));
     }
 }
