@@ -20,8 +20,12 @@
  */
 package com.coyotesong.demo.cxf.endpoint;
 
+import javax.annotation.Resource;
 import javax.xml.ws.Holder;
+import javax.xml.ws.WebServiceContext;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -35,12 +39,21 @@ import com.coyotesong.namespace.helloworldservice.HelloWorldService;
  */
 @Component
 public class HelloWorldServiceEndpoint implements HelloWorldService {
+    private static final Logger LOGGER = LoggerFactory.getLogger(HelloWorldServiceEndpoint.class.getName());
+
     @Autowired
     private HelloWorldController controller;
-    
+
+    @Resource
+    private WebServiceContext wsContext;
+   
     @Override
     public void sayHi(String text, Holder<Boolean> success, Holder<String> responseText)
             throws com.coyotesong.namespace.helloworldservice.HelloWorldException {
+        if (wsContext.getUserPrincipal() != null) {
+            LOGGER.info("remote user is '{}'", wsContext.getUserPrincipal().getName());
+        }
+        
         success.value = Boolean.TRUE;
         responseText.value = controller.sayHi(text);
     }
