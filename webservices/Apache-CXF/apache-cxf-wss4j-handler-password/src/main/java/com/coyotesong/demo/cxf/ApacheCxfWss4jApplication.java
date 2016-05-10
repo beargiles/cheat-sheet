@@ -28,7 +28,7 @@ import org.springframework.context.annotation.ComponentScan;
 @ComponentScan("com.coyotesong.demo.cxf")
 public class ApacheCxfWss4jApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(ApacheCxfWss4jApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(ApacheCxfWss4jApplication.class, args);
+    }
 }

@@ -4,32 +4,13 @@ Apache CXF with WSS4J Handlers
 This package contains the additional classes necessary to add WSS4J security to
 a basic Apache CXF system via handlers.
 
-This class implements two strategies.
-
-USER PASSWORDS
+USERNAME_TOKEN
 --------------
 
-The first strategy is UserToken. That is, username and password. The password can be ignored
-(NONE), plain text (TEXT), or digest (DIGEST).
+The password can be ignored (NONE), plain text (TEXT), or digest (DIGEST).
  
-X509 DIGITAL CERTIFICATES
--------------------------
+USERNAME_TOKEN_SIGNATURE
+------------------------
 
-The second strategy is Signature. Encryption and timestamps are also widely used in
-conjunction with digital signatures. This implementation checks that the encrypted data
-is covered by the digital signature - this prevents some attacks.
+This was added in WSS4J 2.0 but not used here. Yet.
 
-KERBEROS
---------
-
-Kerberos is implemented in a separate project.
-
-
-Other notes
------------
-
-keystore type: JKS, extension .jks
-
-keystore type: PKCS12, extension .p12
-
-org.apache.ws.security.crypto.merlin.keystore.provider=BC

@@ -21,14 +21,13 @@
 package com.coyotesong.demo.cxf.security;
 
 /**
- * Simple password service. Note that Spring Security already has a well thought-out
- * interface.
+ * Simple password service. Note that Spring Security already has a well thought-out interface.
  * 
  * @author bgiles
  */
 public interface PasswordService {
 
-	boolean containsUser(String username);
+    boolean containsUser(String username);
 
-	String getPassword(String username);
+    String getPassword(String username);
 }

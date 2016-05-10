@@ -20,12 +20,13 @@
  */
 package com.coyotesong.demo.cxf.configuration;
 
-import static org.apache.wss4j.common.ConfigurationConstants.ENCRYPT;
-import static org.apache.wss4j.common.ConfigurationConstants.SIGNATURE;
+import static org.apache.wss4j.common.ConfigurationConstants.ACTION;
+import static org.apache.wss4j.common.ConfigurationConstants.PASSWORD_TYPE;
+import static org.apache.wss4j.common.ConfigurationConstants.PW_CALLBACK_REF;
+import static org.apache.wss4j.common.ConfigurationConstants.REQUIRE_TIMESTAMP_EXPIRES;
 import static org.apache.wss4j.common.ConfigurationConstants.TIMESTAMP;
-import static org.apache.wss4j.dom.handler.WSHandlerConstants.*;
+import static org.apache.wss4j.common.ConfigurationConstants.USERNAME_TOKEN;
 
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,7 +42,6 @@ import org.apache.cxf.jaxws.EndpointImpl;
 import org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor;
 import org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor;
 import org.apache.wss4j.dom.WSConstants;
-import org.apache.wss4j.dom.handler.WSHandlerConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -56,68 +56,69 @@ import com.coyotesong.demo.cxf.security.ServerPasswordHandler;
 public class Wss4jConfiguration {
     @Autowired
     private ServerPasswordHandler serverPasswordHandler;
-    
-	@Bean(name = Bus.DEFAULT_BUS_ID)
-	public SpringBus springBus() {
-		return new SpringBus();
-	}
 
-	@Bean
-	public HelloWorldController helloWorld() {
-		return new HelloWorldEndpoint();
-	}
+    @Bean(name = Bus.DEFAULT_BUS_ID)
+    public SpringBus springBus() {
+        return new SpringBus();
+    }
 
-	@Bean
-	public Endpoint endpoint() {
-		// JaxWsServerFactoryBean bean = new JaxWsServerFactoryBean();
+    @Bean
+    public HelloWorldController helloWorld() {
+        return new HelloWorldEndpoint();
+    }
 
-		EndpointImpl endpoint = new EndpointImpl(springBus(), helloWorld());
-		endpoint.publish("/HelloWorldService_1.0");
-		endpoint.setWsdlLocation("HelloWorld1.0.wsdl");
-		
-		endpoint.getInInterceptors().add(new LoggingInInterceptor());
-		endpoint.getInInterceptors().add(saajIn());
-		endpoint.getInInterceptors().add(wss4jIn());
+    @Bean
+    public Endpoint endpoint() {
+        // JaxWsServerFactoryBean bean = new JaxWsServerFactoryBean();
 
-		endpoint.getOutInterceptors().add(wss4jOut());
-		endpoint.getOutInterceptors().add(saajOut());
-		endpoint.getOutInterceptors().add(new LoggingOutInterceptor());
-		
-		return endpoint;
-	}
-	
-	@Bean
-	public SAAJInInterceptor saajIn() {
-		return new SAAJInInterceptor();
-	}
-	
-	@Bean
-	public SAAJOutInterceptor saajOut() {
-		return new SAAJOutInterceptor();
-	}
-	
-	@Bean
-	public WSS4JInInterceptor wss4jIn() {
-		Map<String, Object> props = new HashMap<>();
+        EndpointImpl endpoint = new EndpointImpl(springBus(), helloWorld());
+        endpoint.publish("/HelloWorldService_1.0");
+        endpoint.setWsdlLocation("HelloWorld1.0.wsdl");
+
+        endpoint.getInInterceptors().add(new LoggingInInterceptor());
+        endpoint.getInInterceptors().add(saajIn());
+        endpoint.getInInterceptors().add(wss4jIn());
+
+        endpoint.getOutInterceptors().add(wss4jOut());
+        endpoint.getOutInterceptors().add(saajOut());
+        endpoint.getOutInterceptors().add(new LoggingOutInterceptor());
+
+        return endpoint;
+    }
+
+    @Bean
+    public SAAJInInterceptor saajIn() {
+        return new SAAJInInterceptor();
+    }
+
+    @Bean
+    public SAAJOutInterceptor saajOut() {
+        return new SAAJOutInterceptor();
+    }
+
+    @Bean
+    public WSS4JInInterceptor wss4jIn() {
+        Map<String, Object> props = new HashMap<>();
+        // pre 2.0 use USERNAME_TOKEN
         props.put(ACTION, String.join(" ", TIMESTAMP, USERNAME_TOKEN));
-		//props.put(PASSWORD_TYPE, WSConstants.PW_TEXT);
-		// for hashed passwords use
-		props.put(PASSWORD_TYPE, WSConstants.PW_DIGEST);
+        // props.put(PASSWORD_TYPE, WSConstants.PW_TEXT);
+        // for hashed passwords use
+        props.put(PASSWORD_TYPE, WSConstants.PW_DIGEST);
 
-		// basic security check
+        // basic security check
         props.put(REQUIRE_TIMESTAMP_EXPIRES, "true");
-        
-        // callback used  to verify user token.
+
+        // callback used to verify user token.
         props.put(PW_CALLBACK_REF, serverPasswordHandler);
 
-		return new WSS4JInInterceptor(props);
-	}
-	
-	@Bean
-	public WSS4JOutInterceptor wss4jOut() {
+        return new WSS4JInInterceptor(props);
+    }
+
+    @Bean
+    public WSS4JOutInterceptor wss4jOut() {
         Map<String, Object> props = new HashMap<>();
         props.put(ACTION, String.join(" ", TIMESTAMP));
 
         return new WSS4JOutInterceptor(props);
-	}
+    }
 }
