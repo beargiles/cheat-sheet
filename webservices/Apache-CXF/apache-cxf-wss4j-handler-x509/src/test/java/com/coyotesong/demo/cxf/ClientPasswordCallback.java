@@ -1,6 +1,7 @@
 package com.coyotesong.demo.cxf;
 
-import static org.apache.wss4j.common.ext.WSPasswordCallback.*;
+import static org.apache.wss4j.common.ext.WSPasswordCallback.DECRYPT;
+import static org.apache.wss4j.common.ext.WSPasswordCallback.SIGNATURE;
 
 import java.io.IOException;
 

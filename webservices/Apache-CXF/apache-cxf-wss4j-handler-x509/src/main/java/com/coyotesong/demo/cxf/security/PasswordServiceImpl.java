@@ -27,30 +27,31 @@ import org.springframework.stereotype.Service;
 
 /**
  * Mocked implementation of a user password service.
+ * 
  * @author bgiles
  */
 @Service
 public class PasswordServiceImpl implements PasswordService {
-	private Map<String, String> passwd = new HashMap<>();
-	
-	public PasswordServiceImpl() {
-		passwd.put("joe", "joePassword");
+    private Map<String, String> passwd = new HashMap<>();
+
+    public PasswordServiceImpl() {
+        passwd.put("joe", "joePassword");
         passwd.put("server", "joePassword");
-	}
-	
-	/**
-	 * @see com.coyotesong.demo.cxf.security.PasswordService#containsUser(java.lang.String)
-	 */
-	@Override
-	public boolean containsUser(String username) {
-		return passwd.containsKey(username);
-	}
-	
-	/**
-	 * @see com.coyotesong.demo.cxf.security.PasswordService#getPassword(java.lang.String)
-	 */
-	@Override
-	public String getPassword(String username) {
-		return passwd.get(username);
-	}
+    }
+
+    /**
+     * @see com.coyotesong.demo.cxf.security.PasswordService#containsUser(java.lang.String)
+     */
+    @Override
+    public boolean containsUser(String username) {
+        return passwd.containsKey(username);
+    }
+
+    /**
+     * @see com.coyotesong.demo.cxf.security.PasswordService#getPassword(java.lang.String)
+     */
+    @Override
+    public String getPassword(String username) {
+        return passwd.get(username);
+    }
 }

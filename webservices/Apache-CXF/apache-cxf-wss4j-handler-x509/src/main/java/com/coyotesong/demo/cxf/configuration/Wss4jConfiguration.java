@@ -64,71 +64,71 @@ import com.coyotesong.demo.cxf.security.ServerPasswordHandler;
 public class Wss4jConfiguration {
     @Autowired
     private ServerPasswordHandler serverPasswordHandler;
-    
-	@Bean(name = Bus.DEFAULT_BUS_ID)
-	public SpringBus springBus() {
-		return new SpringBus();
-	}
 
-	@Bean
-	public HelloWorldController helloWorld() {
-		return new HelloWorldEndpoint();
-	}
+    @Bean(name = Bus.DEFAULT_BUS_ID)
+    public SpringBus springBus() {
+        return new SpringBus();
+    }
 
-	@Bean
-	public Endpoint endpoint() {
-		// JaxWsServerFactoryBean bean = new JaxWsServerFactoryBean();
+    @Bean
+    public HelloWorldController helloWorld() {
+        return new HelloWorldEndpoint();
+    }
 
-		EndpointImpl endpoint = new EndpointImpl(springBus(), helloWorld());
-		endpoint.publish("/HelloWorldService_1.0");
-		endpoint.setWsdlLocation("HelloWorld1.0.wsdl");
-		
-		endpoint.getInInterceptors().add(new LoggingInInterceptor());
-		endpoint.getInInterceptors().add(saajIn());
-		endpoint.getInInterceptors().add(wss4jIn());
+    @Bean
+    public Endpoint endpoint() {
+        // JaxWsServerFactoryBean bean = new JaxWsServerFactoryBean();
 
-		endpoint.getOutInterceptors().add(wss4jOut());
-		endpoint.getOutInterceptors().add(saajOut());
-		endpoint.getOutInterceptors().add(new LoggingOutInterceptor());
-		
-		return endpoint;
-	}
-	
-	@Bean
-	public SAAJInInterceptor saajIn() {
-		return new SAAJInInterceptor();
-	}
-	
-	@Bean
-	public SAAJOutInterceptor saajOut() {
-		return new SAAJOutInterceptor();
-	}
-	
-	@Bean
-	public WSS4JInInterceptor wss4jIn() {
-		Map<String, Object> props = new HashMap<>();
+        EndpointImpl endpoint = new EndpointImpl(springBus(), helloWorld());
+        endpoint.publish("/HelloWorldService_1.0");
+        endpoint.setWsdlLocation("HelloWorld1.0.wsdl");
+
+        endpoint.getInInterceptors().add(new LoggingInInterceptor());
+        endpoint.getInInterceptors().add(saajIn());
+        endpoint.getInInterceptors().add(wss4jIn());
+
+        endpoint.getOutInterceptors().add(wss4jOut());
+        endpoint.getOutInterceptors().add(saajOut());
+        endpoint.getOutInterceptors().add(new LoggingOutInterceptor());
+
+        return endpoint;
+    }
+
+    @Bean
+    public SAAJInInterceptor saajIn() {
+        return new SAAJInInterceptor();
+    }
+
+    @Bean
+    public SAAJOutInterceptor saajOut() {
+        return new SAAJOutInterceptor();
+    }
+
+    @Bean
+    public WSS4JInInterceptor wss4jIn() {
+        Map<String, Object> props = new HashMap<>();
         props.put(ACTION, String.join(" ", ENCRYPT, SIGNATURE, TIMESTAMP));
 
-		// inbound messages should be signed by known certificate.
-		props.put(SIG_PROP_FILE, "server_sign.properties");
+        // inbound messages should be signed by known certificate.
+        props.put(SIG_PROP_FILE, "server_sign.properties");
         props.put(ENABLE_SIGNATURE_CONFIRMATION, "true");
 
-		// inbound messages should be encrypted
+        // inbound messages should be encrypted
         props.put(DEC_PROP_FILE, "server_dec.properties");
 
         // basic security checks.
         props.put(IS_BSP_COMPLIANT, "true");
         props.put(REQUIRE_SIGNED_ENCRYPTED_DATA_ELEMENTS, "true");
         props.put(REQUIRE_TIMESTAMP_EXPIRES, "true");
-        
+
         // callback used for both private key (for decryption) and to verify user token.
         props.put(PW_CALLBACK_REF, serverPasswordHandler);
 
-		return new WSS4JInInterceptor(props);
-	}
-	
-	@Bean
-	public WSS4JOutInterceptor wss4jOut() {
+        return new WSS4JInInterceptor(props);
+    }
+
+    @Bean
+    public WSS4JOutInterceptor wss4jOut() {
         Map<String, Object> props = new HashMap<>();
         props.put(ACTION, String.join(" ", ENCRYPT, SIGNATURE, TIMESTAMP));
 
@@ -139,10 +139,10 @@ public class Wss4jConfiguration {
         // outbound messages should be encrypted with inbound public key
         props.put(ENC_PROP_FILE, "server_enc.properties");
         props.put(ENCRYPTION_USER, USE_REQ_SIG_CERT);
-        
+
         // callback used for private key (for signature)
         props.put(PW_CALLBACK_REF, serverPasswordHandler);
 
         return new WSS4JOutInterceptor(props);
-	}
+    }
 }
