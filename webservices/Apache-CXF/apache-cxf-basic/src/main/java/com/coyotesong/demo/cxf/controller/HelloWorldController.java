@@ -20,16 +20,12 @@
  */
 package com.coyotesong.demo.cxf.controller;
 
-import javax.jws.WebMethod;
-import javax.jws.WebParam;
-import javax.jws.WebResult;
-import javax.jws.WebService;
-
-import com.coyotesong.demo.cxf.namespace.helloworldservice.general.HelloWorldReturn;
-
-@WebService
+/**
+ * HelloWorld controller API.
+ *
+ * @author bgiles
+ */
 public interface HelloWorldController {
-    @WebMethod
-    @WebResult(name = "greeting")
-    HelloWorldReturn sayHi(@WebParam(name = "text") String text);
+
+    String sayHi(String text);
 }

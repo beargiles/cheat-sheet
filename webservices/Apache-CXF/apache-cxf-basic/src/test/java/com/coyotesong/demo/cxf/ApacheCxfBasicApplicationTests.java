@@ -23,6 +23,8 @@ package com.coyotesong.demo.cxf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import javax.xml.ws.Holder;
+
 import org.apache.cxf.interceptor.LoggingInInterceptor;
 import org.apache.cxf.interceptor.LoggingOutInterceptor;
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
@@ -31,8 +33,9 @@ import org.junit.runner.RunWith;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.coyotesong.demo.cxf.controller.HelloWorldController;
-import com.coyotesong.demo.cxf.namespace.helloworldservice.general.HelloWorldReturn;
+import com.coyotesong.namespace.helloworldservice.HelloWorldException;
+import com.coyotesong.namespace.helloworldservice.HelloWorldService;
+
 
 /**
  * Establish connection with SOAP server and execute remote call.
@@ -48,25 +51,28 @@ public class ApacheCxfBasicApplicationTests {
      * 
      * @return
      */
-    HelloWorldController newHelloWorldClient() {
+    HelloWorldService newHelloWorldClient() {
         JaxWsProxyFactoryBean factory = new JaxWsProxyFactoryBean();
-        factory.setAddress("http://localhost:8080/soap/HelloWorldService_1.0");
+        factory.setAddress("http://localhost:8080/soap/HelloWorldSoapService_1.0");
         factory.getInInterceptors().add(new LoggingInInterceptor());
         factory.getOutInterceptors().add(new LoggingOutInterceptor());
 
-        return factory.create(HelloWorldController.class);
+        return factory.create(HelloWorldService.class);
     }
 
     /**
      * Test client.
+     * @throws com.coyotesong.namespace.helloworldservice.HelloWorldException 
      */
     @Test
-    public void testClient() {
-        HelloWorldController bean = newHelloWorldClient();
+    public void testClient() throws HelloWorldException {
+        HelloWorldService bean = newHelloWorldClient();
 
+        Holder<Boolean> success = new Holder<>();
+        Holder<String> actual = new Holder<>();
         final String expected = "Hello World";
-        final HelloWorldReturn actual = bean.sayHi("World");
-        assertEquals(expected, actual.getText());
-        assertTrue(actual.isSuccess());
+        bean.sayHi("World", success, actual);
+        assertEquals(expected, actual.value);
+        assertTrue(Boolean.TRUE.equals(success.value));
     }
 }

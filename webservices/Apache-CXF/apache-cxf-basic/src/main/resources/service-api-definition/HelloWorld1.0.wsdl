@@ -1,0 +1,61 @@
+<wsdl:definitions xmlns:s="http://www.w3.org/2001/XMLSchema"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:helloworld="http://coyotesong.com/namespace/helloworldservice/"
+	xmlns:general="http://coyotesong.com/namespace/helloworldservice/general"
+	xmlns:exception="http://coyotesong.com/namespace/helloworldservice/exception"
+	xmlns:ns2="http://schemas.xmlsoap.org/soap/http" name="HelloWorldEndpoint"
+	targetNamespace="http://coyotesong.com/namespace/helloworldservice/">
+	<!-- <wsdl:import location="http://localhost:8080/soap/elloWorldSoapService_1.0?wsdl=HelloWorldController.wsdl" 
+		namespace="http://coyotesong.com/"></wsdl:import> -->
+
+	<wsdl:types>
+		<s:schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:s="http://www.w3.org/2001/XMLSchema"
+			targetNamespace="http://coyotesong.com/namespace/helloworldservice/"
+			attributeFormDefault="qualified" elementFormDefault="qualified">
+			<s:include schemaLocation="HelloWorld1.0.xsd" />
+		</s:schema>
+	</wsdl:types>
+
+	<wsdl:message name="SayHi">
+		<wsdl:part name="parameters" element="general:SayHi" />
+	</wsdl:message>
+	<wsdl:message name="SayHiOut">
+		<wsdl:part name="parameters" element="general:SayHiReturn" />
+	</wsdl:message>
+    <wsdl:message name="HelloWorldException">
+        <wsdl:part name="parameters" element="exception:HelloWorldException" />
+    </wsdl:message>
+
+	<wsdl:portType name="HelloWorldService">
+		<wsdl:operation name="SayHi">
+		<wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Says hello</wsdl:documentation>
+			<wsdl:input message="helloworld:SayHi" />
+			<wsdl:output message="helloworld:SayHiOut" />
+			<wsdl:fault name="HelloWorldException" message="helloworld:HelloWorldException" />
+		</wsdl:operation>
+	</wsdl:portType>
+
+	<wsdl:binding name="HelloWorldService" type="helloworld:HelloWorldService">
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="SayHi">
+			<soap:operation soapAction="http://coyotesong.com/namespace/helloworldservice/SayHi"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="HelloWorldException">
+				<soap:fault name="HelloWorldException" use="literal" />
+			</wsdl:fault>
+		</wsdl:operation>
+	</wsdl:binding>
+
+	<wsdl:service name="HelloWorld">
+		<wsdl:port name="HelloWorldService" binding="helloworld:HelloWorldService">
+			<soap:address location="http://localhost:8080/soap/HelloWorldSoapService_1.0" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<s:schema xmlns:s="http://www.w3.org/2001/XMLSchema"
+	xmlns="http://coyotesong.com/namespace/helloworldservice/general"
+	xmlns:datatypes="http://coyotesong.com/namespace/helloworldservice/datatypes"
+	xmlns:general="http://coyotesong.com/namespace/helloworldservice/general"
+	targetNamespace="http://coyotesong.com/namespace/helloworldservice/general"
+	elementFormDefault="qualified" version="1.0">
+
+	<s:import namespace="http://coyotesong.com/namespace/helloworldservice/datatypes"
+		schemaLocation="helloworld-datatypes.xsd" />
+
+	<s:element name="SayHi">
+		<s:complexType>
+			<s:sequence>
+				<s:element minOccurs="1" maxOccurs="1" name="text" type="s:string" />
+			</s:sequence>
+		</s:complexType>
+	</s:element>
+
+	<s:complexType name="SayHiReturn">
+		<s:sequence>
+			<s:element minOccurs="1" maxOccurs="1" name="Success" type="s:boolean" />
+			<s:element minOccurs="1" maxOccurs="1" name="ResponseText"
+				type="s:string" />
+		</s:sequence>
+	</s:complexType>
+
+	<s:element name="SayHiReturn" type="general:SayHiReturn" />
+
+</s:schema>

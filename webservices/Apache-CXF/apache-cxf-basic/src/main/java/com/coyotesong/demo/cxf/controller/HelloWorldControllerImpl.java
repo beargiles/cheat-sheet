@@ -20,25 +20,18 @@
  */
 package com.coyotesong.demo.cxf.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-
-import com.coyotesong.demo.cxf.namespace.helloworldservice.general.HelloWorldReturn;
-import com.coyotesong.demo.cxf.service.HelloWorldService;
+import org.springframework.stereotype.Service;
 
 /**
- * HelloWorld controller. These methods do not perform exception handling with the assumption that
- * it will be handled elsewhere.
+ * HelloWorld controller implementation.
  * 
  * @author bgiles
  */
-@Controller
+@Service
 public class HelloWorldControllerImpl implements HelloWorldController {
-    @Autowired
-    private HelloWorldService service;
 
     @Override
-    public HelloWorldReturn sayHi(String name) {
-        return new HelloWorldReturn(service.sayHi(name));
+    public String sayHi(String text) {
+        return "Hello " + text;
     }
 }

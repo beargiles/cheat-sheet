@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<s:schema xmlns:helloworld="http://coyotesong.com/namespace/helloworldservice/"
+	xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:datatypes="http://coyotesong.com/namespace/helloworldservice/datatypes"
+	xmlns:exception="http://coyotesong.com/namespace/helloworldservice/exception"
+	targetNamespace="http://coyotesong.com/namespace/helloworldservice/"
+	elementFormDefault="qualified" version="1.0">
+
+	<s:import namespace="http://coyotesong.com/namespace/helloworldservice/general"
+		schemaLocation="HelloWorld-Schemes/helloworld-general.xsd" />
+
+	<s:import namespace="http://coyotesong.com/namespace/helloworldservice/exception"
+		schemaLocation="HelloWorld-Schemes/helloworld-exception.xsd" />
+
+</s:schema>

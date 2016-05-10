@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<s:schema xmlns:s="http://www.w3.org/2001/XMLSchema"
+	xmlns="http://coyotesong.com/namespace/helloworldservice/datatypes"
+	xmlns:datatypes="http://coyotesong.com/namespace/helloworldservice/datatypes"
+	xmlns:mime="http://www.w3.org/2005/05/xmlmime"
+	targetNamespace="http://coyotesong.com/namespace/helloworldservice/datatypes"
+	elementFormDefault="qualified" version="1.0">
+
+	<s:import namespace="http://www.w3.org/2005/05/xmlmime"
+		schemaLocation="w3c-xmlmime-definition.xsd" />
+
+</s:schema>

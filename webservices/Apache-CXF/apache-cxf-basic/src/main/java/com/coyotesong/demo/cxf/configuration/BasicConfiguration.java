@@ -29,8 +29,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
-import com.coyotesong.demo.cxf.controller.HelloWorldController;
-import com.coyotesong.demo.cxf.endpoint.HelloWorldEndpoint;
+import com.coyotesong.demo.cxf.endpoint.HelloWorldServiceEndpoint;
+import com.coyotesong.namespace.helloworldservice.HelloWorldService;
 
 @Configuration
 @Profile("basic")
@@ -42,16 +42,14 @@ public class BasicConfiguration {
     }
 
     @Bean
-    public HelloWorldController helloWorld() {
-        return new HelloWorldEndpoint();
+    public HelloWorldService helloWorldService() {
+        return new HelloWorldServiceEndpoint();
     }
 
     @Bean
     public Endpoint endpoint() {
-        // JaxWsServerFactoryBean bean = new JaxWsServerFactoryBean();
-
-        EndpointImpl endpoint = new EndpointImpl(springBus(), helloWorld());
-        endpoint.publish("/HelloWorldService_1.0");
+        EndpointImpl endpoint = new EndpointImpl(springBus(), helloWorldService());
+        endpoint.publish("/HelloWorldSoapService_1.0");
         endpoint.setWsdlLocation("HelloWorld1.0.wsdl");
 
         return endpoint;

@@ -18,44 +18,30 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package com.coyotesong.demo.cxf.namespace.helloworldservice.general;
+package com.coyotesong.demo.cxf.endpoint;
+
+import javax.xml.ws.Holder;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import com.coyotesong.demo.cxf.controller.HelloWorldController;
+import com.coyotesong.namespace.helloworldservice.HelloWorldService;
 
 /**
- * HelloWorld return object. This is a simple class that contains the returned value and a status
- * flag.
+ * Glue between the SOAP webservice and the spring-aware implementation.
  * 
  * @author bgiles
  */
-public class HelloWorldReturn {
-    private boolean success;
-    private String text;
-
-    public HelloWorldReturn() {
-
-    }
-
-    public HelloWorldReturn(String text) {
-        this(true, text);
-    }
-
-    public HelloWorldReturn(boolean success, String text) {
-        this.success = success;
-        this.text = text;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public boolean isSuccess() {
-        return success;
-    }
-
-    public void setSuccess(boolean success) {
-        this.success = success;
+@Component
+public class HelloWorldServiceEndpoint implements HelloWorldService {
+    @Autowired
+    private HelloWorldController controller;
+    
+    @Override
+    public void sayHi(String text, Holder<Boolean> success, Holder<String> responseText)
+            throws com.coyotesong.namespace.helloworldservice.HelloWorldException {
+        success.value = Boolean.TRUE;
+        responseText.value = controller.sayHi(text);
     }
 }
