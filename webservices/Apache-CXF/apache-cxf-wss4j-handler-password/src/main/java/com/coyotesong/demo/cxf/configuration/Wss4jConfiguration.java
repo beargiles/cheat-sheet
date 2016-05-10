@@ -74,24 +74,14 @@ public class Wss4jConfiguration {
         endpoint.setWsdlLocation("HelloWorld1.0.wsdl");
 
         endpoint.getInInterceptors().add(new LoggingInInterceptor());
-        endpoint.getInInterceptors().add(saajIn());
+        endpoint.getInInterceptors().add(new SAAJInInterceptor());
         endpoint.getInInterceptors().add(wss4jIn());
 
         endpoint.getOutInterceptors().add(wss4jOut());
-        endpoint.getOutInterceptors().add(saajOut());
+        endpoint.getOutInterceptors().add(new SAAJOutInterceptor());
         endpoint.getOutInterceptors().add(new LoggingOutInterceptor());
 
         return endpoint;
-    }
-
-    @Bean
-    public SAAJInInterceptor saajIn() {
-        return new SAAJInInterceptor();
-    }
-
-    @Bean
-    public SAAJOutInterceptor saajOut() {
-        return new SAAJOutInterceptor();
     }
 
     @Bean
