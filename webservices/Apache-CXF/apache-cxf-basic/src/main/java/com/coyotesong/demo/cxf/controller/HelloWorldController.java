@@ -29,7 +29,7 @@ import com.coyotesong.demo.cxf.namespace.helloworldservice.general.HelloWorldRet
 
 @WebService
 public interface HelloWorldController {
-	@WebMethod
-	@WebResult(name="greeting")
-	HelloWorldReturn sayHi(@WebParam(name="text") String text);
+    @WebMethod
+    @WebResult(name = "greeting")
+    HelloWorldReturn sayHi(@WebParam(name = "text") String text);
 }

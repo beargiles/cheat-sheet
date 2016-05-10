@@ -43,30 +43,30 @@ import com.coyotesong.demo.cxf.namespace.helloworldservice.general.HelloWorldRet
 @SpringApplicationConfiguration(classes = ApacheCxfBasicApplication.class)
 public class ApacheCxfBasicApplicationTests {
 
-	/**
-	 * Create HelloWorld client.
-	 * 
-	 * @return
-	 */
-	HelloWorldController newHelloWorldClient() {
-		JaxWsProxyFactoryBean factory = new JaxWsProxyFactoryBean();
-		factory.setAddress("http://localhost:8080/soap/HelloWorldService_1.0");
-		factory.getInInterceptors().add(new LoggingInInterceptor());
-		factory.getOutInterceptors().add(new LoggingOutInterceptor());
-		
-		return factory.create(HelloWorldController.class);
-	}
-	
-	/**
-	 * Test client.
-	 */
-	@Test
-	public void testClient() {
-		HelloWorldController bean = newHelloWorldClient();
+    /**
+     * Create HelloWorld client.
+     * 
+     * @return
+     */
+    HelloWorldController newHelloWorldClient() {
+        JaxWsProxyFactoryBean factory = new JaxWsProxyFactoryBean();
+        factory.setAddress("http://localhost:8080/soap/HelloWorldService_1.0");
+        factory.getInInterceptors().add(new LoggingInInterceptor());
+        factory.getOutInterceptors().add(new LoggingOutInterceptor());
 
-		final String expected = "Hello World";
-		final HelloWorldReturn actual = bean.sayHi("World");
-		assertEquals(expected, actual.getText());
-		assertTrue(actual.isSuccess());
-	}
+        return factory.create(HelloWorldController.class);
+    }
+
+    /**
+     * Test client.
+     */
+    @Test
+    public void testClient() {
+        HelloWorldController bean = newHelloWorldClient();
+
+        final String expected = "Hello World";
+        final HelloWorldReturn actual = bean.sayHi("World");
+        assertEquals(expected, actual.getText());
+        assertTrue(actual.isSuccess());
+    }
 }

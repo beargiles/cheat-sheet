@@ -27,18 +27,18 @@ import com.coyotesong.demo.cxf.namespace.helloworldservice.general.HelloWorldRet
 import com.coyotesong.demo.cxf.service.HelloWorldService;
 
 /**
- * HelloWorld controller. These methods do not perform exception handling
- * with the assumption that it will be handled elsewhere.
+ * HelloWorld controller. These methods do not perform exception handling with the assumption that
+ * it will be handled elsewhere.
  * 
  * @author bgiles
  */
 @Controller
 public class HelloWorldControllerImpl implements HelloWorldController {
-	@Autowired
-	private HelloWorldService service;
+    @Autowired
+    private HelloWorldService service;
 
-	@Override
-	public HelloWorldReturn sayHi(String name) {
-		return new HelloWorldReturn(service.sayHi(name));
-	}
+    @Override
+    public HelloWorldReturn sayHi(String name) {
+        return new HelloWorldReturn(service.sayHi(name));
+    }
 }

@@ -21,41 +21,41 @@
 package com.coyotesong.demo.cxf.namespace.helloworldservice.general;
 
 /**
- * HelloWorld return object. This is a simple class that contains the
- * returned value and a status flag.
+ * HelloWorld return object. This is a simple class that contains the returned value and a status
+ * flag.
  * 
  * @author bgiles
  */
 public class HelloWorldReturn {
-	private boolean success;
-	private String text;
+    private boolean success;
+    private String text;
 
-	public HelloWorldReturn() {
+    public HelloWorldReturn() {
 
-	}
+    }
 
-	public HelloWorldReturn(String text) {
-		this(true, text);
-	}
+    public HelloWorldReturn(String text) {
+        this(true, text);
+    }
 
-	public HelloWorldReturn(boolean success, String text) {
-		this.success = success;
-		this.text = text;
-	}
+    public HelloWorldReturn(boolean success, String text) {
+        this.success = success;
+        this.text = text;
+    }
 
-	public String getText() {
-		return text;
-	}
+    public String getText() {
+        return text;
+    }
 
-	public void setText(String text) {
-		this.text = text;
-	}
+    public void setText(String text) {
+        this.text = text;
+    }
 
-	public boolean isSuccess() {
-		return success;
-	}
+    public boolean isSuccess() {
+        return success;
+    }
 
-	public void setSuccess(boolean success) {
-		this.success = success;
-	}
+    public void setSuccess(boolean success) {
+        this.success = success;
+    }
 }

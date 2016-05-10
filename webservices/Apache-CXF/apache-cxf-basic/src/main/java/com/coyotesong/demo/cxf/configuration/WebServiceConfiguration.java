@@ -28,8 +28,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class WebServiceConfiguration {
 
-	@Bean
-	public ServletRegistrationBean dispatcherServlet() {
-		return new ServletRegistrationBean(new CXFServlet(), "/soap/*");
-	}
+    @Bean
+    public ServletRegistrationBean dispatcherServlet() {
+        return new ServletRegistrationBean(new CXFServlet(), "/soap/*");
+    }
 }

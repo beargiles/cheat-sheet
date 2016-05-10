@@ -23,16 +23,15 @@ package com.coyotesong.demo.cxf.service;
 import org.springframework.stereotype.Service;
 
 /**
- * HelloWorld service API. The annotations are used to dynamically create
- * the API.
+ * HelloWorld service API. The annotations are used to dynamically create the API.
  *
  * @author bgiles
  */
 @Service
 public class HelloWorldServiceImpl implements HelloWorldService {
-	
-	@Override
-	public String sayHi(String text) {
-		return "Hello " + text;
-	}
+
+    @Override
+    public String sayHi(String text) {
+        return "Hello " + text;
+    }
 }

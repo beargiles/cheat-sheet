@@ -30,26 +30,26 @@ import com.coyotesong.demo.cxf.controller.HelloWorldController;
 import com.coyotesong.demo.cxf.namespace.helloworldservice.general.HelloWorldReturn;
 
 /**
- * HelloWorld SOAP endpoint. This class is a thin layer over the controller but
- * adds exception handling.
+ * HelloWorld SOAP endpoint. This class is a thin layer over the controller but adds exception
+ * handling.
  * 
  * @author bgiles
  */
 @WebService(endpointInterface = "com.coyotesong.demo.cxf.controller.HelloWorldController")
 public class HelloWorldEndpoint implements HelloWorldController {
 
-	@Autowired
-	private HelloWorldController helloWorldController;
-	
-	@Resource
-	private WebServiceContext wsContext;
-	
-	@Override
-	public HelloWorldReturn sayHi(String text) {
-		try {
-			return helloWorldController.sayHi(text);
-		} catch (Exception e) {
-			return new HelloWorldReturn(false, e.getMessage());
-		}
-	}
+    @Autowired
+    private HelloWorldController helloWorldController;
+
+    @Resource
+    private WebServiceContext wsContext;
+
+    @Override
+    public HelloWorldReturn sayHi(String text) {
+        try {
+            return helloWorldController.sayHi(text);
+        } catch (Exception e) {
+            return new HelloWorldReturn(false, e.getMessage());
+        }
+    }
 }

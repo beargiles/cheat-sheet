@@ -36,24 +36,24 @@ import com.coyotesong.demo.cxf.endpoint.HelloWorldEndpoint;
 @Profile("basic")
 public class BasicConfiguration {
 
-	@Bean(name = Bus.DEFAULT_BUS_ID)
-	public SpringBus springBus() {
-		return new SpringBus();
-	}
+    @Bean(name = Bus.DEFAULT_BUS_ID)
+    public SpringBus springBus() {
+        return new SpringBus();
+    }
 
-	@Bean
-	public HelloWorldController helloWorld() {
-		return new HelloWorldEndpoint();
-	}
+    @Bean
+    public HelloWorldController helloWorld() {
+        return new HelloWorldEndpoint();
+    }
 
-	@Bean
-	public Endpoint endpoint() {
-		// JaxWsServerFactoryBean bean = new JaxWsServerFactoryBean();
+    @Bean
+    public Endpoint endpoint() {
+        // JaxWsServerFactoryBean bean = new JaxWsServerFactoryBean();
 
-		EndpointImpl endpoint = new EndpointImpl(springBus(), helloWorld());
-		endpoint.publish("/HelloWorldService_1.0");
-		endpoint.setWsdlLocation("HelloWorld1.0.wsdl");
+        EndpointImpl endpoint = new EndpointImpl(springBus(), helloWorld());
+        endpoint.publish("/HelloWorldService_1.0");
+        endpoint.setWsdlLocation("HelloWorld1.0.wsdl");
 
-		return endpoint;
-	}
+        return endpoint;
+    }
 }

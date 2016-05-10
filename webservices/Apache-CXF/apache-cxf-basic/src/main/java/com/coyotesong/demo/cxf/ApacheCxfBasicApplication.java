@@ -33,7 +33,7 @@ import org.springframework.context.annotation.ComponentScan;
 @ComponentScan("com.coyotesong.demo.cxf")
 public class ApacheCxfBasicApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(ApacheCxfBasicApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(ApacheCxfBasicApplication.class, args);
+    }
 }

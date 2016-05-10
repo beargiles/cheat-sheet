@@ -21,12 +21,11 @@
 package com.coyotesong.demo.cxf.service;
 
 /**
- * HelloWorld service API. The annotations are used to dynamically create
- * the API.
+ * HelloWorld service API. The annotations are used to dynamically create the API.
  *
  * @author bgiles
  */
 public interface HelloWorldService {
 
-	String sayHi(String text);
+    String sayHi(String text);
 }
