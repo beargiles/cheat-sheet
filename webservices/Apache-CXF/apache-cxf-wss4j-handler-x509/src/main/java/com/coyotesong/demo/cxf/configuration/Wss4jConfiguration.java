@@ -20,12 +20,22 @@
  */
 package com.coyotesong.demo.cxf.configuration;
 
+import static org.apache.wss4j.common.ConfigurationConstants.ACTION;
+import static org.apache.wss4j.common.ConfigurationConstants.DEC_PROP_FILE;
+import static org.apache.wss4j.common.ConfigurationConstants.ENABLE_SIGNATURE_CONFIRMATION;
 import static org.apache.wss4j.common.ConfigurationConstants.ENCRYPT;
+import static org.apache.wss4j.common.ConfigurationConstants.ENCRYPTION_USER;
+import static org.apache.wss4j.common.ConfigurationConstants.ENC_PROP_FILE;
+import static org.apache.wss4j.common.ConfigurationConstants.IS_BSP_COMPLIANT;
+import static org.apache.wss4j.common.ConfigurationConstants.PW_CALLBACK_REF;
+import static org.apache.wss4j.common.ConfigurationConstants.REQUIRE_SIGNED_ENCRYPTED_DATA_ELEMENTS;
+import static org.apache.wss4j.common.ConfigurationConstants.REQUIRE_TIMESTAMP_EXPIRES;
 import static org.apache.wss4j.common.ConfigurationConstants.SIGNATURE;
+import static org.apache.wss4j.common.ConfigurationConstants.SIGNATURE_USER;
+import static org.apache.wss4j.common.ConfigurationConstants.SIG_PROP_FILE;
 import static org.apache.wss4j.common.ConfigurationConstants.TIMESTAMP;
-import static org.apache.wss4j.dom.handler.WSHandlerConstants.*;
+import static org.apache.wss4j.common.ConfigurationConstants.USE_REQ_SIG_CERT;
 
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,8 +50,6 @@ import org.apache.cxf.interceptor.LoggingOutInterceptor;
 import org.apache.cxf.jaxws.EndpointImpl;
 import org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor;
 import org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor;
-import org.apache.wss4j.dom.WSConstants;
-import org.apache.wss4j.dom.handler.WSHandlerConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -109,6 +117,7 @@ public class Wss4jConfiguration {
         props.put(DEC_PROP_FILE, "server_dec.properties");
 
         // basic security checks.
+        props.put(IS_BSP_COMPLIANT, "true");
         props.put(REQUIRE_SIGNED_ENCRYPTED_DATA_ELEMENTS, "true");
         props.put(REQUIRE_TIMESTAMP_EXPIRES, "true");
         

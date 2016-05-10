@@ -24,6 +24,7 @@ import static org.apache.wss4j.common.ConfigurationConstants.ACTION;
 import static org.apache.wss4j.common.ConfigurationConstants.DEC_PROP_FILE;
 import static org.apache.wss4j.common.ConfigurationConstants.ENABLE_SIGNATURE_CONFIRMATION;
 import static org.apache.wss4j.common.ConfigurationConstants.ENCRYPT;
+import static org.apache.wss4j.common.ConfigurationConstants.IS_BSP_COMPLIANT;
 import static org.apache.wss4j.common.ConfigurationConstants.PASSWORD_TYPE;
 import static org.apache.wss4j.common.ConfigurationConstants.PW_CALLBACK_REF;
 import static org.apache.wss4j.common.ConfigurationConstants.REQUIRE_SIGNED_ENCRYPTED_DATA_ELEMENTS;
@@ -90,6 +91,7 @@ public class ApacheCxfWss4jApplicationTests {
         props.put(DEC_PROP_FILE, "client_dec.properties");
 
         // basic security checks
+        props.put(IS_BSP_COMPLIANT, "true");
         props.put(REQUIRE_SIGNED_ENCRYPTED_DATA_ELEMENTS, "true");
         props.put(REQUIRE_TIMESTAMP_EXPIRES, "true");
         
