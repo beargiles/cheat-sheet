@@ -1,0 +1,134 @@
+<!-- this file tells how to link tomcat server resources to web.xml -->
+<!-- it can also be used to define tomcat servers -->
+<?xml version="1.0" encoding="UTF-8">
+<Context path="" docBase="baeldung">
+    <!-- local definition of resources -->
+    <!-- could also be placed in &lt;tomcat_home&gt>/conf/server.xml in GlobalNamingResources stanza -->
+
+    <!-- driver (but no connection manager) -->
+    <Resource name="jdbc/BaeldungDatabase"
+        auth="Container"
+        type="javax.sql.DataSource"
+        driverClassName="org.postgresql.Driver"
+        url="jdbc:postgresql://localhost:5432/baeldung"
+        username="baeldung"
+        password="pass1234"
+        maxActive="20"
+        maxIdle="10"
+        maxWait="-1"/>
+
+    <!-- Hikari, driver-based -->
+    <Resource name="jdbc/OracleHikari" auth="Container"
+        factory="com.zaxxer.hikari.HikariJNDIFactory"
+        type="javax.sql.DataSource"
+        minimumIdle="5" 
+        maximumPoolSize="10"
+        connectionTimeout="300000"
+        jdbcUrl="jdbc:oracle:thin:@orcl_server:1521:orcl"
+        dataSource.implicitCachingEnabled="true" 
+        dataSource.user="user"
+        dataSource.password="pwd" />
+
+    <!-- Hikari, datasource based -->
+    <Resource name="jdbc/OracleHikari" auth="Container"
+        factory="com.zaxxer.hikari.HikariJNDIFactory"
+        type="javax.sql.DataSource"
+        minimumIdle="5" 
+        maximumPoolSize="10"
+        connectionTimeout="300000"
+        dataSourceClassName="oracle.jdbc.pool.OracleDataSource"
+        dataSource.implicitCachingEnabled="true" 
+        dataSource.user="user"
+        dataSource.password="pwd"
+        dataSource.url="jdbc:oracle:thin:@orcl_server:1521:orcl"/>
+
+    <!-- Hikari, maria db example -->
+    <Resource name="jdbc/myDs" auth="Container"
+        factory="com.zaxxer.hikari.HikariJNDIFactory"
+        type="javax.sql.DataSource"
+        minimumIdle="5" 
+        maximumPoolSize="10"
+        connectionTimeout="300000"
+        dataSourceClassName="org.mariadb.jdbc.MySQLDataSource"
+        dataSource.serverName="localhost"
+        dataSource.port="3306"
+        dataSource.databaseName="myDatabase"
+        dataSource.user="username"
+        dataSource.password="password"
+        />
+
+
+    <!-- email -->
+    <Resource name="mail/Session" auth="Container"
+        type="javax.mail.Session"
+        username="my.smtp.user"
+        password="my-secret"
+        mail.debug="false"
+        mail.transport.protocol="smtp"
+        mail.smtp.host= "xxx.xxx.xxx.xxx"
+        mail.smtp.auth= "true"
+        mail.smtp.port= "25"
+        mail.smtp.starttls.enable="true"
+        description="Global Email Resource"
+        />
+
+
+    <!-- Apache ActiveMQ -->
+    <Resource name="jms/ConnectionFactory" auth="Container"
+        type="org.apache.activemq.ActiveMQConnectionFactory"
+        description="JMS Connection Factory"
+        factory="org.apache.activemq.jndi.JNDIReferenceFactory"
+        brokerURL="vm://localhost"
+        brokerName="LocalActiveMQBroker"/>
+
+    <Resource name="jms/someTopic" auth="Container"
+        type="org.apache.activemq.command.ActiveMQTopic"
+        description="my Topic"
+        factory="org.apache.activemq.jndi.JNDIReferenceFactory"
+        physicalName="FOO.BAR"/>
+
+    <Resource name="jms/aQueue" auth="Container"
+        type="org.apache.activemq.command.ActiveMQQueue"
+        description="my Queue"
+        factory="org.apache.activemq.jndi.JNDIReferenceFactory"
+        physicalName="FOO.BAR"/>
+
+
+    <!-- IBM Websphere MQ -->
+    <Resource
+        name="jms/qcf_sandbox"
+        auth="Container"
+        type="com.ibm.mq.jms.MQQueueConnectionFactory"
+        factory="com.ibm.mq.jms.MQQueueConnectionFactoryFactory"
+        description="JMS Queue Connection Factory for sending messages"
+        HOST="localhost"
+        PORT="1414"
+        CHAN="CHANNEL_SANDBOX"
+        TRAN="1"
+        QMGR="QM_SANDBOX"/>
+
+    <Resource
+        name="jms/SandboxQ"
+        auth="Container"
+        type="com.ibm.mq.jms.MQQueue"
+        factory="com.ibm.mq.jms.MQQueueFactory"
+        description="JMS Queue"
+        QU="SANDBOX_Q"/>
+
+    <!-- note: to use JMX with tomcat and connect via JConsole add this -->
+    <!--
+        CATALINA_OPTS="$CATALINA_OPTS -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=1099 \
+            -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false" 
+     -->
+
+    <Environment name="tt" value="this is a string" type="java.lang.String"/>
+
+    <!-- to monitor for changes? -->
+    <WatchedResource>WEB-INF/web.xml</WatchedResource>
+
+    <!-- could also be placed in &lt;tomcat_home&gt>/conf/context.xml -->
+	<ResourceLink
+	   name="jdbc/BaeldungDatabase"
+	   global="jdbc/BaeldungDatabase"
+	   type="javax.sql.DataSource" />
+</Context>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://java.sun.com/xml/ns/javaee" version="2.5">
+	<servlet>
+		<servlet-name>comingsoon</servlet-name>
+		<servlet-class>mysite.server.ComingSoonServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>comingsoon</servlet-name>
+		<url-pattern>/*</url-pattern>
+	</servlet-mapping>
+
+	<!-- locally defined environment variable -->
+	<env-entry>
+		<env-entry-name>local-env-var</env-entry-name>
+		<env-entry-value>my environment variable value</env-entry-value>
+		<env-entry-type>java.lang.String</env-entry-type>
+	</env-entry>
+
+	<!-- note: if we use 'resource-ref' we need to add 'res-auth'. -->
+	<!-- resource-ref can be CONTAINER or APPLICATION -->
+
+	<!-- environment variable -->
+	<!-- I -think- this is how to do this... -->
+	<resource-env-ref>
+		<description>
+		</description>
+		<res-ref-name>tt</res-ref-name>
+		<res-type>java.lang.String</res-type>
+	</resource-env-ref>
+
+	<!-- database -->
+	<resource-env-ref>
+		<description>
+			Resource reference to a factory for java.sql.Connection
+			instances that may be used for talking to a particular
+			database that
+			is configured in the &lt;Context&gt;
+			configuration for the web
+			application.
+		</description>
+		<res-ref-name>jdbc/BaeldungDatabase</res-ref-name>
+		<res-type>javax.sql.DataSource</res-type>
+	</resource-env-ref>
+
+	<!-- email -->
+	<resource-env-ref>
+		<description>
+			Resource reference to a factory for javax.mail.Session
+			instances that may be used for sending electronic mail
+			messages, preconfigured to connect to the appropriate
+			SMTP server.
+		</description>
+		<res-ref-name>mail/Session</res-ref-name>
+		<res-type>javax.mail.Session</res-type>
+	</resource-env-ref>
+</web-app>
