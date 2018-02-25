@@ -1,4 +1,4 @@
-package org.baelung.persistence;
+package org.baeldung.persistence;
 
 import javax.naming.NamingException;
 import javax.persistence.EntityManagerFactory;

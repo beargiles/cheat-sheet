@@ -7,7 +7,8 @@ Standalone
 --
 
 The jndi.standalone package contains code that allows us to create and populate JNDI
-information in standalone apps.
+information in standalone apps. This information is from 
+(http://www.baeldung.com/spring-persistence-jpa-jndi-datasource).
 
 Spring JPA
 --
